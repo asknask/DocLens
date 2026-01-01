@@ -7,42 +7,42 @@ services:
       - "8000"
     environment:
       # --- OpenAI ---
-      - OPENAI_API_KEY
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
       - OPENAI_VISION_MODEL=${OPENAI_VISION_MODEL:-gpt-4o-mini}
 
       # --- AWS (Optional) ---
-      - AWS_REGION
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - TEXTRACT_ENABLED
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - TEXTRACT_ENABLED=${TEXTRACT_ENABLED}
 
       # --- App Settings ---
       - STORAGE_DIR=/app/storage
       - DEBUG=${DEBUG:-false}
-      - STORAGE_TTL_MINUTES
-      - CLEANUP_INTERVAL_MINUTES
+      - STORAGE_TTL_MINUTES=${STORAGE_TTL_MINUTES}
+      - CLEANUP_INTERVAL_MINUTES=${CLEANUP_INTERVAL_MINUTES}
 
       # --- File Limits ---
-      - MAX_FILE_SIZE_PDF
-      - MAX_FILE_SIZE_DOCX
-      - MAX_FILE_SIZE_IMAGE
-      - MAX_PDF_PAGES
-      - MAX_DOCX_CHARS
-      - MAX_DOCX_IMAGES
+      - MAX_FILE_SIZE_PDF=${MAX_FILE_SIZE_PDF}
+      - MAX_FILE_SIZE_DOCX=${MAX_FILE_SIZE_DOCX}
+      - MAX_FILE_SIZE_IMAGE=${MAX_FILE_SIZE_IMAGE}
+      - MAX_PDF_PAGES=${MAX_PDF_PAGES}
+      - MAX_DOCX_CHARS=${MAX_DOCX_CHARS}
+      - MAX_DOCX_IMAGES=${MAX_DOCX_IMAGES}
 
       # --- Vision Limits ---
-      - MAX_VISION_PAGES
-      - VISION_PAGE_RATIO
-      - MAX_VISION_IMAGES
+      - MAX_VISION_PAGES=${MAX_VISION_PAGES}
+      - VISION_PAGE_RATIO=${VISION_PAGE_RATIO}
+      - MAX_VISION_IMAGES=${MAX_VISION_IMAGES}
 
       # --- Rate Limiting ---
-      - RATE_LIMIT_UPLOADS_PER_HOUR
-      - RATE_LIMIT_RUNS_PER_HOUR
-      - PROCESSING_TIMEOUT_SECONDS
+      - RATE_LIMIT_UPLOADS_PER_HOUR=${RATE_LIMIT_UPLOADS_PER_HOUR}
+      - RATE_LIMIT_RUNS_PER_HOUR=${RATE_LIMIT_RUNS_PER_HOUR}
+      - PROCESSING_TIMEOUT_SECONDS=${PROCESSING_TIMEOUT_SECONDS}
 
       # --- Security ---
-      - CORS_ORIGINS
+      - CORS_ORIGINS=${CORS_ORIGINS}
 
     volumes:
       - doclens-storage:/app/storage
@@ -57,7 +57,8 @@ services:
     expose:
       - "3000"
     environment:
-      - NEXT_PUBLIC_API_URL
+      # FIXED: Added explicit mapping here
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
     depends_on:
       - backend
     restart: unless-stopped
