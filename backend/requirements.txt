@@ -1,0 +1,39 @@
+# FastAPI and ASGI server
+fastapi==0.128.0
+uvicorn[standard]==0.40.0
+python-multipart==0.0.21
+
+# Pydantic for data validation
+pydantic==2.11.4
+pydantic-settings==2.12.0
+
+# LangChain ecosystem (latest versions)
+langchain==1.2.0
+langchain-core==1.2.5
+langchain-openai==1.1.6
+langchain-community==0.4.1
+
+# Document extraction
+PyMuPDF==1.26.7
+python-docx==1.2.0
+Pillow==12.0.0
+
+# OpenAI API (dependency of langchain-openai)
+openai==2.14.0
+
+# AWS SDK for Textract
+boto3==1.38.0
+
+# Async file operations
+aiofiles==25.1.0
+
+# Image hashing for deduplication
+imagehash==4.3.2
+
+# MIME type detection (Windows-compatible)
+python-magic-bin==0.4.14
+
+# Testing
+pytest==9.0.2
+pytest-asyncio==1.3.0
+httpx==0.28.1
