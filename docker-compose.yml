@@ -6,61 +6,61 @@ services:
     expose:
       - "8000"
     environment:
-      # ==========================
-      # OpenAI
-      # ==========================
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      OPENAI_MODEL: ${OPENAI_MODEL}
-      OPENAI_VISION_MODEL: ${OPENAI_VISION_MODEL}
+      # --- OpenAI ---
+      - OPENAI_API_KEY
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_VISION_MODEL=${OPENAI_VISION_MODEL:-gpt-4o-mini}
 
-      # ==========================
-      # AWS (Textract / optional)
-      # ==========================
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      AWS_REGION: ${AWS_REGION}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      # --- AWS (Optional) ---
+      - AWS_REGION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - TEXTRACT_ENABLED
 
-      # ==========================
-      # Rate limiting & processing
-      # ==========================
-      RATE_LIMIT_UPLOADS_PER_HOUR: ${RATE_LIMIT_UPLOADS_PER_HOUR}
-      RATE_LIMIT_RUNS_PER_HOUR: ${RATE_LIMIT_RUNS_PER_HOUR}
-      PROCESSING_TIMEOUT_SECONDS: ${PROCESSING_TIMEOUT_SECONDS}
+      # --- App Settings ---
+      - STORAGE_DIR=/app/storage
+      - DEBUG=${DEBUG:-false}
+      - STORAGE_TTL_MINUTES
+      - CLEANUP_INTERVAL_MINUTES
 
-      # ==========================
-      # CORS
-      # ==========================
-      CORS_ORIGINS: ${CORS_ORIGINS}
+      # --- File Limits ---
+      - MAX_FILE_SIZE_PDF
+      - MAX_FILE_SIZE_DOCX
+      - MAX_FILE_SIZE_IMAGE
+      - MAX_PDF_PAGES
+      - MAX_DOCX_CHARS
+      - MAX_DOCX_IMAGES
 
-      # ==========================
-      # App
-      # ==========================
-      STORAGE_DIR: /app/storage
-      DEBUG: ${DEBUG:-false}
+      # --- Vision Limits ---
+      - MAX_VISION_PAGES
+      - VISION_PAGE_RATIO
+      - MAX_VISION_IMAGES
+
+      # --- Rate Limiting ---
+      - RATE_LIMIT_UPLOADS_PER_HOUR
+      - RATE_LIMIT_RUNS_PER_HOUR
+      - PROCESSING_TIMEOUT_SECONDS
+
+      # --- Security ---
+      - CORS_ORIGINS
 
     volumes:
       - doclens-storage:/app/storage
-
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: unless-stopped
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     expose:
       - "3000"
     environment:
-      # ==========================
-      # Frontend (public only)
-      # ==========================
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_API_URL
     depends_on:
       - backend
+    restart: unless-stopped
 
 volumes:
   doclens-storage:
