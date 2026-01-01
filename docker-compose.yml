@@ -3,15 +3,45 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
+    expose:
+      - "8000"
     environment:
-      - STORAGE_DIR=/app/storage
-      - DEBUG=${DEBUG:-false}
+      # ==========================
+      # OpenAI
+      # ==========================
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+      OPENAI_VISION_MODEL: ${OPENAI_VISION_MODEL}
+
+      # ==========================
+      # AWS (Textract / optional)
+      # ==========================
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+
+      # ==========================
+      # Rate limiting & processing
+      # ==========================
+      RATE_LIMIT_UPLOADS_PER_HOUR: ${RATE_LIMIT_UPLOADS_PER_HOUR}
+      RATE_LIMIT_RUNS_PER_HOUR: ${RATE_LIMIT_RUNS_PER_HOUR}
+      PROCESSING_TIMEOUT_SECONDS: ${PROCESSING_TIMEOUT_SECONDS}
+
+      # ==========================
+      # CORS
+      # ==========================
+      CORS_ORIGINS: ${CORS_ORIGINS}
+
+      # ==========================
+      # App
+      # ==========================
+      STORAGE_DIR: /app/storage
+      DEBUG: ${DEBUG:-false}
+
     volumes:
       - doclens-storage:/app/storage
+
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
       interval: 30s
@@ -22,12 +52,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
+    expose:
+      - "3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://backend:8000
+      # ==========================
+      # Frontend (public only)
+      # ==========================
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     depends_on:
       - backend
 
