@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Literal
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -66,6 +67,23 @@ class Settings(BaseSettings):
     
     # CORS Configuration
     cors_origins: list[str] = ["http://localhost:3000"]
+    
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS origins from JSON array or comma-separated string."""
+        if isinstance(v, str):
+            # Try JSON first
+            import json
+            try:
+                parsed = json.loads(v)
+                if isinstance(parsed, list):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+            # Fall back to comma-separated
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
     
     @property
     def allowed_mime_types(self) -> dict[str, str]:
