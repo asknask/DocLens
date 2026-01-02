@@ -277,7 +277,9 @@ export default function Home() {
         {/* Footer */}
         <footer className="border-t border-border mt-12">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 text-center text-sm text-muted-foreground">
-            <p>DocLens - An AI powered document analysis tool (POC)</p>
+            <p>DocLens - An AI powered document analysis tool (POC).</p>
+            <p>Some features may not work as expected. Send feedback to <a href="mailto:asimonwave@gmail.com">asimonwave@gmail.com</a></p>
+            <br />
             <p className="text-xs">Created by Asim</p>
           </div>
         </footer>
