@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.python
     expose:
       - "8000"
     environment:
@@ -51,7 +51,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.node
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     expose:
