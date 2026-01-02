@@ -43,11 +43,7 @@ services:
 
       # --- Security ---
       - CORS_ORIGINS=${CORS_ORIGINS}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "https://doclens-api.asimcodes.dev/health" ]
-      interval: 5m
-      timeout: 5s
-      retries: 3
+
     volumes:
       - doclens-storage:/app/storage
     restart: unless-stopped
