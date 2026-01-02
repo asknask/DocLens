@@ -4,7 +4,7 @@ Handles .txt files and similar text-based documents.
 """
 from pathlib import Path
 
-from app.models.ir_models import DocumentIR, DocumentMetadata, TextBlock
+from app.models.ir_models import BlockLocation, DocumentIR, DocumentMetadata, TextBlock
 
 
 def extract_text(
@@ -57,8 +57,8 @@ def extract_text(
     if text_content.strip():
         blocks.append(
             TextBlock(
-                text=text_content,
-                page_number=1,
+                content=text_content,
+                location=BlockLocation(page=1),
             )
         )
     
