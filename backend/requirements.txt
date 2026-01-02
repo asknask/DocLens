@@ -30,8 +30,8 @@ aiofiles==25.1.0
 # Image hashing for deduplication
 imagehash==4.3.2
 
-# MIME type detection (Windows-compatible)
-python-magic-bin==0.4.14
+# MIME type detection
+python-magic==0.4.28
 
 # Testing
 pytest==9.0.2
