@@ -65,25 +65,23 @@ class Settings(BaseSettings):
     # Processing Limits
     processing_timeout_seconds: int = 60
     
-    # CORS Configuration
-    cors_origins: list[str] = ["http://localhost:3000"]
+    # CORS Configuration (stored as string to avoid pydantic-settings JSON parsing issues)
+    cors_origins_raw: str = "http://localhost:3000"
     
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, v):
+    @property
+    def cors_origins(self) -> list[str]:
         """Parse CORS origins from JSON array or comma-separated string."""
-        if isinstance(v, str):
-            # Try JSON first
-            import json
-            try:
-                parsed = json.loads(v)
-                if isinstance(parsed, list):
-                    return parsed
-            except json.JSONDecodeError:
-                pass
-            # Fall back to comma-separated
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v
+        import json
+        v = self.cors_origins_raw
+        # Try JSON first
+        try:
+            parsed = json.loads(v)
+            if isinstance(parsed, list):
+                return parsed
+        except json.JSONDecodeError:
+            pass
+        # Fall back to comma-separated
+        return [origin.strip() for origin in v.split(",") if origin.strip()]
     
     @property
     def allowed_mime_types(self) -> dict[str, str]:
