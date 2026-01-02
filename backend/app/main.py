@@ -45,8 +45,11 @@ def get_settings_dep() -> Settings:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown."""
+    global _startup_time
+    
     # Startup
     print("🚀 DocLens API starting up...")
+    _startup_time = datetime.utcnow()
     settings = get_settings()
     
     # Ensure storage directory exists
@@ -62,12 +65,18 @@ async def lifespan(app: FastAPI):
     stop_cleanup_task()
 
 
+# Track startup time for uptime calculation
+_startup_time: datetime | None = None
+
 # Create FastAPI app
 app = FastAPI(
     title="DocLens API",
     description="Document Analyzer API - Upload documents and analyze with AI",
     version="1.0.0",
     lifespan=lifespan,
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
 )
 
 # CORS middleware
@@ -115,8 +124,28 @@ def get_limits_info(settings: Settings, remaining: dict | None = None) -> dict:
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint."""
-    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+    """
+    Health check endpoint for Coolify and other monitoring services.
+    
+    Returns:
+        - status: "healthy" if the service is running
+        - service: Name of the service
+        - version: API version
+        - timestamp: Current UTC timestamp
+        - uptime_seconds: Time since service started (if available)
+    """
+    response = {
+        "status": "healthy",
+        "service": "doclens-api",
+        "version": "1.0.0",
+        "timestamp": datetime.utcnow().isoformat(),
+    }
+    
+    if _startup_time:
+        uptime = (datetime.utcnow() - _startup_time).total_seconds()
+        response["uptime_seconds"] = int(uptime)
+    
+    return response
 
 
 # ============== Upload Endpoint ==============
