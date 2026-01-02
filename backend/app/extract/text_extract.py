@@ -45,10 +45,11 @@ def extract_text(
     
     metadata = DocumentMetadata(
         filename=filename,
+        file_type="text",
         mime_type="text/plain",
+        size_bytes=len(file_bytes),
         page_count=1,  # Text files are considered single-page
-        char_count=char_count,
-        source_encoding=encoding_used,
+        total_chars=char_count,
     )
     
     # Create a single text block for the entire content
