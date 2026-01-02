@@ -20,8 +20,8 @@ ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN npm run build
 
 # Healthcheck for Coolify
-HEALTHCHECK --interval=5m --timeout=5s \
-    CMD curl -f https://doclens-api.asimcodes.dev/health || exit 1
+HEALTHCHECK --interval=5m --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1
 
 # Expose port
 EXPOSE 3000

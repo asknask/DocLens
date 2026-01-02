@@ -19,8 +19,8 @@ COPY . .
 RUN mkdir -p /app/storage
 
 # Healthcheck for Coolify
-HEALTHCHECK --interval=5m --timeout=5s \
-    CMD curl -f https://doclens-api.asimcodes.dev/health || exit 1
+HEALTHCHECK --interval=5m --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
 
 # Expose port
 EXPOSE 8000
