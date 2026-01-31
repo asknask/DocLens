@@ -192,12 +192,6 @@ This is a **Proof of Concept (PoC)** with the following limitations:
 - **Single instance**: Not designed for horizontal scaling
 - **No persistence**: Results not stored permanently
 
-## 📝 License
-
-MIT License - See LICENSE file for details.
-
----
-
 <div align="center">
   <p>Built with ❤️ using FastAPI, LangChain, and Next.js</p>
 </div>
